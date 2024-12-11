@@ -44,6 +44,22 @@ def walk(data, LL, i):
     return res
 
 
+def walk2(data, LL, path):
+    res = []
+    i = path[-1]
+    if data[i] == 9:
+        res.append(path)
+    if data[i-LL] == data[i] + 1:
+        res.extend(walk2(data, LL, path + [i-LL]))
+    if data[i-1] == data[i] + 1:
+        res.extend(walk2(data, LL, path + [i-1]))
+    if data[i+LL] == data[i] + 1:
+        res.extend(walk2(data, LL, path + [i+LL]))
+    if data[i+1] == data[i] + 1:
+        res.extend(walk2(data, LL, path + [i+1]))
+    return res
+
+
 def solution1(raw_data):
     data, LL = parse_data(raw_data)
     res = 0
@@ -57,4 +73,21 @@ def solution1(raw_data):
         idx += 1
     return res
 
-res = solution1(raw_data)
+
+
+def solution2(raw_data):
+    data, LL = parse_data(raw_data)
+    res = 0
+    idx = 0
+    while True:
+        try:
+            idx = data.index(0, idx)
+        except ValueError:
+            break
+        res += len(walk2(data, LL, [idx]))
+        idx += 1
+    return res
+
+
+res1 = solution1(raw_data)
+res2 = solution2(raw_data)
