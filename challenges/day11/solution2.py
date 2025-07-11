@@ -31,36 +31,21 @@ def handle_stone(stone):
     return [stone * 2024]
 
 
-def resolve(data, N):
-    old_list = data
-    new_list = []
-    for i in range(N):
-        for s in old_list:
-            new_list.extend(handle_stone(s))
-        old_list = new_list
-        new_list = []
-    return old_list
-
-
-def solution1(raw_data):
-    return len(resolve(parse_data(raw_data), 25))
-
-
-def solution2(raw_data):
-    One_ten = resolve([1], 10)
-    zero_ten = resolve([0], 10)
-    data = parse_data(raw_data)
-    l = resolve(data, 10)
-    l.count(1)
-
-
+@functools.cache
+def resolve2(stone, N):
+    if N == 0:
+        return 1
+    res = 0
+    for s in handle_stone(stone):
+        res += resolve2(s, N-1)
+    return res
 
 
 def parse_data(raw_data):
     return [int(itm) for itm in raw_data.strip().split(" ")]
 
 
-res = solution1(raw_data)
-
-
-
+res = 0
+for s in parse_data(raw_data):
+    res += resolve2(s, 75)
+print(res)
